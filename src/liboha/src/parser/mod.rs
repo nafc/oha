@@ -37,7 +37,6 @@ impl Parser {
 
     fn expression(&mut self) -> Expression {
         let expr = self.atom();
-
         self.traveler.next();
 
         if self.traveler.remaining() > 0 {
@@ -53,8 +52,11 @@ impl Parser {
 
     fn atom(&mut self) -> Expression {
         match self.traveler.current().token_type {
-            TokenType::IntLiteral   => Expression::IntLiteral(self.traveler.current_content().parse::<i32>().unwrap()),
-            TokenType::FloatLiteral => Expression::FloatLiteral(self.traveler.current_content().parse::<f32>().unwrap()),
+            TokenType::IntLiteral    => Expression::IntLiteral(self.traveler.current_content().parse::<i32>().unwrap()),
+            TokenType::FloatLiteral  => Expression::FloatLiteral(self.traveler.current_content().parse::<f32>().unwrap()),
+            TokenType::BoolLiteral   => Expression::BoolLiteral(self.traveler.current_content() == "true"),
+            TokenType::StringLiteral => Expression::StringLiteral(self.traveler.current_content().clone()),
+            TokenType::CharLiteral   => Expression::CharLiteral(self.traveler.current_content().chars().nth(0).unwrap().clone()),
             ref t => panic!("unexpected atom: {:?}", t),
         }
     }

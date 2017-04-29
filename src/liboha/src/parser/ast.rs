@@ -3,6 +3,7 @@ pub enum Expression {
     IntLiteral(i32),
     FloatLiteral(f32),
     StringLiteral(String),
+    CharLiteral(char),
     BoolLiteral(bool),
     Identifier(String),
     Operation(Box<Expression>, Operand, Box<Expression>),
