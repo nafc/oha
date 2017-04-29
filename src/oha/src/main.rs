@@ -4,7 +4,7 @@ use liboha::parser;
 
 fn main() {
     let test_data = r#"
-1 13.3 .1 1337
+0 * 1 * 2 * 3 + 4 + 5 + 6 + 7 + 8 + 9
 "#;
 
     let mut block_tree = lexer::BlockTree::new(&test_data, 0);

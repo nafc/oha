@@ -1,7 +1,4 @@
-use parser::lexer;
-
 use lexer::{Token, TokenType};
-use lexer::block_tree;
 
 #[derive(Debug, Clone)]
 pub struct Traveler {
