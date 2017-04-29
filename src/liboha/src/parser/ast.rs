@@ -12,6 +12,8 @@ pub enum Expression {
 #[derive(Debug)]
 pub enum Statement {
     Block(Box<Vec<Statement>>),
+    Assignment(Box<Expression>, Box<Expression>),
+    Declaration(Box<Expression>, Box<Expression>),
     Expression(Box<Expression>),
 }
 

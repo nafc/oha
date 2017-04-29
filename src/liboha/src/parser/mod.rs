@@ -29,8 +29,36 @@ impl Parser {
         stack
     }
 
+    #[allow(unused_must_use)]
     fn statement(&mut self) -> Statement {
         match self.traveler.current().token_type {
+            TokenType::Identifier => {
+                let ident = self.atom();
+                self.traveler.next();
+
+                let content = self.traveler.current_content();
+
+                if content != "=" {
+                    self.traveler.prev();
+                    return Statement::Expression(Box::new(self.expression()))
+                }
+
+                self.traveler.next();
+                Statement::Assignment(Box::new(ident), Box::new(self.expression()))
+            },
+
+            TokenType::Keyword => match self.traveler.current_content().as_str() {
+                "let" => {
+                    self.traveler.next();
+                    let ident = self.atom();
+                    self.traveler.next();
+                    self.traveler.expect(TokenType::Symbol);
+                    self.traveler.next();
+
+                    Statement::Declaration(Box::new(ident), Box::new(self.expression()))
+                }
+                _ => Statement::Expression(Box::new(self.expression())),
+            },
             _ => Statement::Expression(Box::new(self.expression())),
         }
     }
@@ -51,12 +79,14 @@ impl Parser {
     }
 
     fn atom(&mut self) -> Expression {
-        match self.traveler.current().token_type {
+        match self.traveler.current().token_type.clone() {
             TokenType::IntLiteral    => Expression::IntLiteral(self.traveler.current_content().parse::<i32>().unwrap()),
             TokenType::FloatLiteral  => Expression::FloatLiteral(self.traveler.current_content().parse::<f32>().unwrap()),
             TokenType::BoolLiteral   => Expression::BoolLiteral(self.traveler.current_content() == "true"),
             TokenType::StringLiteral => Expression::StringLiteral(self.traveler.current_content().clone()),
             TokenType::CharLiteral   => Expression::CharLiteral(self.traveler.current_content().chars().nth(0).unwrap().clone()),
+            TokenType::Identifier    => Expression::Identifier(self.traveler.current_content()),
+
             ref t => panic!("unexpected atom: {:?}", t),
         }
     }

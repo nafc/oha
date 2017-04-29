@@ -6,6 +6,9 @@ fn main() {
     let test_data = r#"
 0 + r"hey" + 'a'
 true
+
+let a = 1 + 10
+a = '\n'
 "#;
 
     let mut block_tree = lexer::BlockTree::new(&test_data, 0);
