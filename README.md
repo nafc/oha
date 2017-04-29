@@ -28,6 +28,9 @@ if true
 elif false
   print "no bb"
 
+unless false
+  print "hey hey is a thing"
+
 loop
   print("infinite loop")
 

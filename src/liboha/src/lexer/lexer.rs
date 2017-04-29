@@ -17,6 +17,7 @@ pub fn lexer(data: &mut Chars) -> Lexer {
         ",",
         ".",
         ":",
+        "!",
     ].iter().map(|&x| x.to_string()).collect();
 
     let operators = vec![
@@ -30,18 +31,20 @@ pub fn lexer(data: &mut Chars) -> Lexer {
         ">",
         ">=",
         "<=",
-        "!=",
     ].iter().map(|&x| x.to_string()).collect();
 
     let keywords = vec![
         "let",
         "if",
+        "unless",
         "else",
         "data",
         "func",
         "pass",
         "while",
         "loop",
+        "not",
+        "or",
     ].iter().map(|&x| x.to_string()).collect();
 
     let boolean = vec![
