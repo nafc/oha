@@ -12,6 +12,11 @@ a = '\n'
 
 let b
 b = "heyy"
+
+let c = func(a, b)
+    let c = a + b
+
+    func add(a, b) func(a, b) a + b
 "#;
 
     let mut block_tree = lexer::BlockTree::new(&test_data, 0);

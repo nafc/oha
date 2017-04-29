@@ -6,6 +6,7 @@ pub enum Expression {
     CharLiteral(char),
     BoolLiteral(bool),
     Identifier(String),
+    Function(Function),
     Operation(Box<Expression>, Operand, Box<Expression>),
 }
 
@@ -15,6 +16,29 @@ pub enum Statement {
     Assignment(Box<Expression>, Box<Expression>),
     Declaration(Box<Expression>, Option<Box<Expression>>),
     Expression(Box<Expression>),
+}
+
+#[derive(Debug)]
+pub enum FunctionBody {
+    Block(Vec<Statement>),
+    Expression(Box<Expression>),
+}
+
+#[derive(Debug)]
+pub struct Function {
+    name: Option<String>,
+    args: Vec<String>,
+    body: FunctionBody,
+}
+
+impl Function {
+    pub fn new(name: Option<String>, args: Vec<String>, body: FunctionBody) -> Function {
+        Function {
+            name: name,
+            args: args,
+            body: body,
+        }
+    }
 }
 
 #[derive(Debug)]

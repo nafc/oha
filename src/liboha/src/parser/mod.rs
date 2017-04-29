@@ -1,7 +1,7 @@
 pub mod traveler;
 pub mod ast;
 
-pub use self::ast::{Expression, Statement, Operand, operand};
+pub use self::ast::{Expression, Statement, Operand, Function, FunctionBody, operand};
 pub use self::traveler::Traveler;
 
 pub use super::lexer;
@@ -62,9 +62,11 @@ impl Parser {
                         self.traveler.prev();
                         Statement::Declaration(Box::new(ident), None)
                     }
-                }
+                },
+
                 _ => Statement::Expression(Box::new(self.expression())),
             },
+
             _ => Statement::Expression(Box::new(self.expression())),
         }
     }
@@ -84,6 +86,7 @@ impl Parser {
         expr
     }
 
+    #[allow(unused_must_use)]
     fn atom(&mut self) -> Expression {
         match self.traveler.current().token_type.clone() {
             TokenType::IntLiteral    => Expression::IntLiteral(self.traveler.current_content().parse::<i32>().unwrap()),
@@ -93,7 +96,56 @@ impl Parser {
             TokenType::CharLiteral   => Expression::CharLiteral(self.traveler.current_content().chars().nth(0).unwrap().clone()),
             TokenType::Identifier    => Expression::Identifier(self.traveler.current_content()),
 
+            TokenType::Keyword       => match self.traveler.current_content().as_str() {
+                "func" => {
+                    self.traveler.next();
+
+                    let mut name = None;
+
+                    if self.traveler.current().token_type == TokenType::Identifier {
+                        name = Some(self.traveler.current_content());
+                        self.traveler.next();
+                    }
+
+                    let mut args = Vec::new();
+
+                    if self.traveler.current_content() == "(" {
+                        self.traveler.next();
+
+                        while self.traveler.current().token_type == TokenType::Identifier {
+                            args.push(self.traveler.current_content());
+                            self.traveler.next();
+
+                            if self.traveler.current_content() == "," {
+                                self.traveler.next();
+                            }
+                        }
+
+                        self.traveler.expect_content(")".to_owned());
+                        self.traveler.next();
+                    }
+
+                    match self.traveler.current().token_type {
+                        TokenType::Block(_) => Expression::Function(Function::new(name, args, FunctionBody::Block(self.block()))),
+                        _ => Expression::Function(Function::new(name, args, FunctionBody::Expression(Box::new(self.expression())))),
+                    }
+                },
+
+                _ => panic!("unexpected atom: '{}'", self.traveler.current_content()),
+            },
+
             _ => panic!("unexpected atom: '{}'", self.traveler.current_content()),
+        }
+    }
+
+    fn block(&mut self) -> Vec<Statement> {
+        match self.traveler.current().token_type {
+            TokenType::Block(ref v) => {
+                let mut p = Parser::new(Traveler::new(v.clone()));
+                p.parse()
+            },
+
+            _ => panic!("expected block, found: {}", self.traveler.current_content()),
         }
     }
 

@@ -52,4 +52,12 @@ impl<'a> Traveler {
             Err(format!("expected {:?} but found {:#?}", token, self.current()))
         }
     }
+
+    pub fn expect_content(&self, content: String) -> Result<&Token, String> {
+        if self.current_content() == content {
+            Ok(self.current())
+        } else {
+            Err(format!("expected {} but found {:#?}", content, self.current()))
+        }
+    }
 }
