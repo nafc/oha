@@ -1,8 +1,8 @@
-mod token;
-mod tokenizer;
-mod matcher;
-mod block_tree;
-mod lexer;
+pub mod token;
+pub mod tokenizer;
+pub mod matcher;
+pub mod block_tree;
+pub mod lexer;
 
 pub use self::token::{Token, TokenType, TokenPosition};
 pub use self::matcher::Matcher;
