@@ -1,13 +1,10 @@
 extern crate liboha;
 use liboha::lexer;
+use liboha::parser;
 
 fn main() {
     let test_data = r#"
-func foo(a, b)
-    if true == false
-        pass a + b
-    else
-        pass a - b
+1 13.3 .1 1337
 "#;
 
     let mut block_tree = lexer::BlockTree::new(&test_data, 0);
@@ -16,5 +13,9 @@ func foo(a, b)
     let lexed_root = lexer::lex_branch(&block_tree.tree(&indents));
     let flat_root  = lexer::flatten_branch(&lexed_root);
 
-    println!("{:#?}\n, {:#?}", lexed_root, flat_root)
+    println!("{:#?}\n, {:#?}", lexed_root, flat_root);
+
+    let mut parser = parser::Parser::new(parser::Traveler::new(flat_root));
+
+    println!("{:#?}", parser.parse());
 }

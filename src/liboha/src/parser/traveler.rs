@@ -10,7 +10,7 @@ pub struct Traveler {
 }
 
 impl<'a> Traveler {
-    pub fn from(tokens: Vec<Token>) -> Traveler {
+    pub fn new(tokens: Vec<Token>) -> Traveler {
         Traveler {
             tokens: tokens,
             top: 0,
@@ -34,7 +34,7 @@ impl<'a> Traveler {
     }
 
     pub fn remaining(&self) -> usize {
-        self.tokens.len() - self.top
+        self.tokens.len() - self.top + 1
     }
 
     pub fn current(&self) -> &Token {
