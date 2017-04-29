@@ -2,22 +2,19 @@ extern crate liboha;
 use liboha::lexer;
 
 fn main() {
-    let mut test_data = r#"
-ident?
-ident_
-ident123
-_ident
+    let test_data = r#"
+func foo(a, b)
+    if true == false
+        pass a + b
+    else
+        pass a - b
+"#;
 
-1 + 1 * 20 - .123 * 11.11
-r"hey\n"
-"hey\n"
-'c'
-'\n'
-    "#.chars();
+    let mut block_tree = lexer::BlockTree::new(&test_data, 0);
+    let indents        = block_tree.collect_indents();
 
-    let lexer = lexer::lexer(&mut test_data);
+    let lexed_root = lexer::lex_branch(&block_tree.tree(&indents));
+    let flat_root  = lexer::flatten_branch(&lexed_root);
 
-    for t in lexer {
-        println!("{:#?}", t)
-    }
+    println!("{:#?}\n, {:#?}", lexed_root, flat_root)
 }
