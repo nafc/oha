@@ -9,6 +9,9 @@ true
 
 let a = 1 + 10
 a = '\n'
+
+let b
+b = "heyy"
 "#;
 
     let mut block_tree = lexer::BlockTree::new(&test_data, 0);

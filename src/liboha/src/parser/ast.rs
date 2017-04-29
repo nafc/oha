@@ -13,7 +13,7 @@ pub enum Expression {
 pub enum Statement {
     Block(Box<Vec<Statement>>),
     Assignment(Box<Expression>, Box<Expression>),
-    Declaration(Box<Expression>, Box<Expression>),
+    Declaration(Box<Expression>, Option<Box<Expression>>),
     Expression(Box<Expression>),
 }
 

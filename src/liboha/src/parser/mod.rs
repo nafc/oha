@@ -51,11 +51,17 @@ impl Parser {
                 "let" => {
                     self.traveler.next();
                     let ident = self.atom();
-                    self.traveler.next();
-                    self.traveler.expect(TokenType::Symbol);
+
                     self.traveler.next();
 
-                    Statement::Declaration(Box::new(ident), Box::new(self.expression()))
+                    if self.traveler.current_content() == "=" {
+                        self.traveler.next();
+
+                        Statement::Declaration(Box::new(ident), Some(Box::new(self.expression())))
+                    } else {
+                        self.traveler.prev();
+                        Statement::Declaration(Box::new(ident), None)
+                    }
                 }
                 _ => Statement::Expression(Box::new(self.expression())),
             },
@@ -87,7 +93,7 @@ impl Parser {
             TokenType::CharLiteral   => Expression::CharLiteral(self.traveler.current_content().chars().nth(0).unwrap().clone()),
             TokenType::Identifier    => Expression::Identifier(self.traveler.current_content()),
 
-            ref t => panic!("unexpected atom: {:?}", t),
+            _ => panic!("unexpected atom: '{}'", self.traveler.current_content()),
         }
     }
 
