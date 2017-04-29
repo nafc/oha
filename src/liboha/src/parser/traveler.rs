@@ -20,20 +20,16 @@ impl<'a> Traveler {
     pub fn next(&mut self) -> bool {
         if self.top < self.tokens.len() {
             self.top += 1;
-
-            return true;
+            return true
         }
-
         false
     }
 
     pub fn prev(&mut self) -> bool {
         if self.top > 0 {
             self.top -= 1;
-
-            return true;
+            return true
         }
-
         false
     }
 
@@ -53,9 +49,10 @@ impl<'a> Traveler {
     }
 
     pub fn expect(&self, token: TokenType) -> Result<&Token, String> {
-        match self.current().token_type == token {
-            true => Ok(self.current()),
-            false => Err(format!("expected {:?} but found {:#?}", token, self.current())),
+        if self.current().token_type == token {
+            Ok(self.current())
+        } else {
+            Err(format!("expected {:?} but found {:#?}", token, self.current()))
         }
     }
 }
