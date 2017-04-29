@@ -22,9 +22,9 @@ impl Snapshot {
 
 #[derive(Clone, Debug)]
 pub struct Tokenizer {
-    pub pos: TokenPosition,
-    index: usize,
-    items: Vec<char>,
+    pub pos:   TokenPosition,
+    index:     usize,
+    items:     Vec<char>,
     snapshots: Vec<Snapshot>,
 }
 
@@ -129,7 +129,6 @@ impl Tokenizer {
         }
     }
 
-    // Immutable access
     pub fn index(&self) -> &usize {
         &self.index
     }

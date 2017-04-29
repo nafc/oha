@@ -1,12 +1,15 @@
 #[derive(Debug, Clone, PartialEq)]
 pub enum TokenType {
+    Block(Vec<Token>),
     IntLiteral,
     FloatLiteral,
     StringLiteral,
     CharLiteral,
+    BoolLiteral,
     Symbol,
     Operator,
     Identifier,
+    Keyword,
     Whitespace,
     EOF,
 }
