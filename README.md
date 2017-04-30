@@ -2,6 +2,26 @@
 ### oha handles anything
 a language for the console
 
+---
+
+currently parsing
+```
+0 + r"hey" + 'a'
+true
+
+let a = 1 + 10
+a = '\n'
+
+let b
+b = "heyy"
+
+let c = func(a, b)
+    let c = a + b
+
+    func()
+        func add(a, b) func(a, b) a + b
+```
+
 ## draft
 
 comment
